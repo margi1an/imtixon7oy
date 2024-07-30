@@ -55,7 +55,7 @@ const PieChart = () => {
 
   return (
     <div className="p-6 text-center mb-4 capitalize">
-      <h1 className="text-3xl font-bold mb-4">Car Category Distribution</h1>
+      <h1 className="text-3xl font-bold mb-4">Car buy</h1>
       <div className='ml-[400px] mt-[20px]' id="chart">
         <ApexCharts options={options} series={series} type="pie" width={480} />
       </div>
