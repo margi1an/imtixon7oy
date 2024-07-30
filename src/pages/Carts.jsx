@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FaAddressCard } from "react-icons/fa6";
-import {
-  increaseQuantity,
-  decreaseQuantity,
-  removeFromCart,
-} from "../app/cartSlice";
+import { increaseQuantity, decreaseQuantity, removeFromCart, updateCartItem } from "../app/cartSlice";
 import toast from "react-hot-toast";
 import { MdDeleteSweep } from "react-icons/md";
 
 const Carts = () => {
-  const [selectedItem, setSelectedItem] = useState(null); // State for selected item
+  const [selectedItem, setSelectedItem] = useState(null)
+  const [editItem, setEditItem] = useState(null);
   const cartItems = useSelector((state) => state.cart.items || []);
   const dispatch = useDispatch();
 
@@ -32,14 +29,25 @@ const Carts = () => {
     }
   };
 
-  const handleOpenModal = (item) => {
-    setSelectedItem(item);
-    document.getElementById("my_modal_3").showModal();
+  const handleOpenUpdateModal = (item) => {
+    setEditItem({ ...item }); 
+    document.getElementById("update_modal").showModal();
   };
 
-  const handleCloseModal = () => {
-    setSelectedItem(null);
-    document.getElementById("my_modal_3").close();
+  const handleCloseUpdateModal = () => {
+    setEditItem(null);
+    document.getElementById("update_modal").close();
+  };
+
+  const handleUpdate = () => {
+    if (editItem) {
+      dispatch(updateCartItem({
+        id: editItem.id,
+        updatedItem: { ...editItem }
+      }));
+      toast.success("Item updated successfully");
+      handleCloseUpdateModal();
+    }
   };
 
   const calculateTotal = () => {
@@ -56,11 +64,11 @@ const Carts = () => {
         {cartItems?.map((item) => (
           <div
             key={item.id}
-            className=" shadow-lg rounded-lg p-4 border items-center border-gray-200 hover:shadow-xl transition-shadow duration-300"
+            className="shadow-lg rounded-lg p-4 border items-center border-gray-200 hover:shadow-xl transition-shadow duration-300"
           >
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center space-x-4">
-                <button onClick={() => handleOpenModal(item)}>
+                <button onClick={() => handleOpenUpdateModal(item)}>
                   <img
                     src={item.imageURL}
                     alt={item.carName}
@@ -91,10 +99,13 @@ const Carts = () => {
                   <h1 className="text-xl">+</h1>
                 </button>
 
-                <button className="btn btn-primary">
+                <button
+                  className="btn bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600 transition-colors"
+                  onClick={() => handleOpenUpdateModal(item)}
+                >
                   <FaAddressCard className="w-6 h-6" />
                 </button>
-
+                
                 <button
                   className="btn bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 transition-colors"
                   onClick={() => handleRemove(item.id)}
@@ -116,23 +127,54 @@ const Carts = () => {
           Total: {calculateTotal().toLocaleString()} $
         </h2>
       </div>
-      <dialog id="my_modal_3" className="modal">
-        <div className="modal-box text-center">
-          <h3 className="font-bold text-2xl mb-4">Bigger Picture : </h3>
-          <div className="text-center">
-            {selectedItem && (
-              <>
-                <img
-                  src={selectedItem.imageURL}
-                  alt={selectedItem.carName}
-                  className="rounded-lg"
+
+      {/* Update qilish modali */}
+      <dialog id="update_modal" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-2xl mb-4">Update Item</h3>
+          {editItem && (
+            <div>
+              <div className="mb-4">
+                <label className="label">
+                  <span className="label-text">Image URL</span>
+                </label>
+                <input
+                  type="text"
+                  value={editItem.imageURL}
+                  onChange={(e) => setEditItem({ ...editItem, imageURL: e.target.value })}
+                  className="input input-bordered w-full"
                 />
-              </>
-            )}
-          </div>
+              </div>
+              <div className="mb-4">
+                <label className="label">
+                  <span className="label-text">Name</span>
+                </label>
+                <input
+                  type="text"
+                  value={editItem.carName}
+                  onChange={(e) => setEditItem({ ...editItem, carName: e.target.value })}
+                  className="input input-bordered w-full"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="label">
+                  <span className="label-text">Comment</span>
+                </label>
+                <input
+                  type="text"
+                  value={editItem.comment}
+                  onChange={(e) => setEditItem({ ...editItem, comment: e.target.value })}
+                  className="input input-bordered w-full"
+                />
+              </div>
+              <button className="btn btn-primary w-full" onClick={handleUpdate}>
+                Update Item
+              </button>
+            </div>
+          )}
         </div>
         <form method="dialog" className="modal-backdrop">
-          <button type="button" onClick={handleCloseModal}>
+          <button type="button" onClick={handleCloseUpdateModal}>
             Close
           </button>
         </form>

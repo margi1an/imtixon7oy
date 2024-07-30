@@ -1,4 +1,3 @@
-// src/components/Chart.jsx
 import React, { useState, useEffect } from 'react';
 import ApexCharts from 'react-apexcharts';
 import { db } from '../firebase/firebaseConfig';

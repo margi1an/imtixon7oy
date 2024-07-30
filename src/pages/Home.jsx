@@ -7,6 +7,7 @@ import { CiRead } from "react-icons/ci";
 import { MdDelete } from "react-icons/md";
 import Loader from "../components/loader";
 import './Home.css'
+import { GrUpdate } from "react-icons/gr";
 import toast from "react-hot-toast";
 
 function Home() {
@@ -39,9 +40,8 @@ function Home() {
     try {
       await deleteDoc(doc(db, "cars", id));
       setCars(cars.filter(car => car.id !== id));
-     if( toast.success("Car deleted successfully!")){
+      toast.success("Car deleted successfully!");
       navigate('/');
-     }
     } catch (error) {
       console.error("Error deleting car: ", error);
     }
@@ -51,13 +51,20 @@ function Home() {
     return <Loader />;
   }
 
+  const haj1 = () => {
+    return (
+      <div className="">
+        <h1 className="text-5xl pt-24">No Cars 😕</h1>
+      </div>
+    );
+  };
+
   return (
     <div className="text-center mt-9">
-      <h1 className="text-6xl font-bold">Cars:</h1>
+      <h1 className="text-6xl font-bold">{!cars.length ? haj1() : `Cars - ${cars.length}`}</h1>
       <div className="grid grid-cols-3 align-elements mb-[20px] gap-28 mt-[50px]">
         {cars.map((car) => (
-         <Link to = {`/product/${car.id}`}>
-           <div className="card bg-base-100 w-96 shadow-xl" key={car.id}>
+          <div className="card bg-base-100 w-96 shadow-xl" key={car.id}>
             <figure>
               <img
                 className="rounded w-96 h-56"
@@ -78,18 +85,21 @@ function Home() {
                   onClick={() => handleDelete(car.id)}
                 >
                   <MdDelete className="w-6 h-6" />
-                  Delete
+                </button>
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => navigate(`/update/${car.id}`)}
+                >
+                  <GrUpdate className="w-6 h-6" />
                 </button>
                 <Link to={`/product/${car.id}`}>
                   <button className="btn btn-primary">
                     <CiRead className="w-6 h-6" />
-                    Read More
                   </button>
                 </Link>
               </div>
             </div>
           </div>
-         </Link>
         ))}
       </div>
       <Footer />

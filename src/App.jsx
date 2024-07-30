@@ -19,6 +19,7 @@ import Chart from "./pages/Chart";
 import Product from "./pages/Product";
 import ErrorPage from './components/ErrorPage'
 import { ClipLoader } from "react-spinners";
+import UpdateCar from "./pages/UptadeCar";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,6 +42,10 @@ function App() {
         {
           path:'/cart',
           element: <Cart></Cart>
+        },
+        {
+          path:'/update/:id',
+          element: <UpdateCar></UpdateCar>
         },
         {
           path:'/carts',

@@ -2,7 +2,7 @@
 
   function Footer() {
     return (
-  <div className="bg-neutral bg-fixed">
+  <div className="bg-neutral bg-fixed mt-[180px] ">
         <div>
         <footer className="footer bg-neutral text-neutral-content mt-9 text-1xl pl-[100px] p-10">
         <nav>

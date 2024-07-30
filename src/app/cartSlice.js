@@ -1,4 +1,4 @@
-// CartSlice.jsx
+// cartSlice.jsx
 import { createSlice } from '@reduxjs/toolkit';
 
 const loadCartFromLocalStorage = () => {
@@ -42,10 +42,18 @@ const cartSlice = createSlice({
         existingItem.quantity -= 1;
         saveCartToLocalStorage(state.items);
       }
+    },
+    updateCartItem: (state, action) => {
+      const { id, updatedItem } = action.payload;
+      const itemIndex = state.items.findIndex(item => item.id === id);
+      if (itemIndex > -1) {
+        state.items[itemIndex] = { ...state.items[itemIndex], ...updatedItem };
+        saveCartToLocalStorage(state.items);
+      }
     }
   }
 });
 
-export const { addToCart, removeFromCart, increaseQuantity, decreaseQuantity } = cartSlice.actions;
+export const { addToCart, removeFromCart, increaseQuantity, decreaseQuantity, updateCartItem } = cartSlice.actions;
 
 export default cartSlice.reducer;

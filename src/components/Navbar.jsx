@@ -22,24 +22,29 @@ function Navbar() {
   const [weatherCondition, setWeatherCondition] = useState("");
   const [theme, setTheme] = useState(local());
   const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.items);
+  const cartItemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const { user } = useSelector((state) => state.user);
+
   const handleOut = async () => {
     try {
-      const out = await signOut(auth);
+      await signOut(auth);
       toast.success("LogOut successfully ✔✋");
       dispatch(logout());
     } catch (error) {
       toast.error("LogOut failed ✋");
     }
   };
+
   const handleTheme = () => {
-    const newTheme = theme == "winter" ? "dracula" : "winter";
+    const newTheme = theme === "winter" ? "dracula" : "winter";
     setTheme(newTheme);
   };
+
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
   }, [theme]);
-  const { user } = useSelector((state) => state.user);
 
   const getBackgroundImage = () => {
     switch (weatherCondition) {
@@ -56,14 +61,13 @@ function Navbar() {
 
   useEffect(() => {
     if (weatherCondition) {
-      document.querySelector(".navbar").style.backgroundImage =
-        getBackgroundImage();
+      document.querySelector(".navbar").style.backgroundImage = getBackgroundImage();
     }
   }, [weatherCondition]);
 
   return (
     <div
-      className="mx-auto "
+      className="mx-auto"
       style={{ backgroundImage: getBackgroundImage(), backgroundSize: "cover" }}
     >
       <header className="bg-base-200">
@@ -73,20 +77,20 @@ function Navbar() {
               <h1 className="text-3xl font-bold font-serif">My Car</h1>
             </Link>
             <Weather
-              className="font-medium w-96 justify-between "
+              className="font-medium w-96 justify-between"
               setWeatherCondition={setWeatherCondition}
-            ></Weather>
+            />
           </div>
           <div className="navbar-center flex gap-3">
-            <NavLink className="btn " to="/">
+            <NavLink className="btn" to="/">
               <FaHome />
               Home
             </NavLink>
-            <NavLink className="btn " to="/cart">
+            <NavLink className="btn" to="/cart">
               <IoCreate />
               Create Cart
             </NavLink>
-            <NavLink className="btn " to="/chart">
+            <NavLink className="btn" to="/chart">
               <FaChartBar />
               Chart
             </NavLink>
@@ -94,18 +98,17 @@ function Navbar() {
           <div className="navbar-end">
             <div className="flex gap-4 items-center">
               <Link to="/carts">
-              <div className="indicator">
-                <span className="indicator-item badge badge-secondary">
-                  1
-                </span>
-                <FaCartShopping className="w-7 h-7 cursor-pointer" />
-              </div>
+                <div className="indicator">
+                  <span className="indicator-item badge badge-secondary">
+                    {cartItemCount}
+                  </span>
+                  <FaCartShopping className="w-7 h-7 cursor-pointer" />
+                </div>
               </Link>
               <h4>hi ✋ {user.displayName}</h4>
               <div className="avatar">
                 <div className="ring-primary ring-offset-base-100 w-10 h-10 rounded-full ring ring-offset-2">
                   <img
-                    className=""
                     src={
                       user.photoURL
                         ? user.photoURL
@@ -119,17 +122,15 @@ function Navbar() {
                 <input
                   onClick={handleTheme}
                   type="checkbox"
-                  checked={theme == "dracula"}
+                  checked={theme === "dracula"}
                   readOnly
                 />
-                <IoMdSunny className="swap-on h-7 w-7 fill-current"></IoMdSunny>
-                <IoMdMoon className="swap-off h-7 w-7 fill-current"></IoMdMoon>
+                <IoMdSunny className="swap-on h-7 w-7 fill-current" />
+                <IoMdMoon className="swap-off h-7 w-7 fill-current" />
               </label>
               <button
                 className="btn btn-primary"
-                onClick={() =>
-                  document.getElementById("my_modal_2").showModal()
-                }
+                onClick={() => document.getElementById("my_modal_2").showModal()}
               >
                 ✋
               </button>
@@ -138,12 +139,11 @@ function Navbar() {
                   <h1 className="text-2xl mb-4 font-bold">
                     Log Out Modal 🤷‍♂️✋😐
                   </h1>
-
                   <button
                     className="btn btn-primary text-center"
                     onClick={handleOut}
                   >
-                    LogOut ✋😀{" "}
+                    LogOut ✋😀
                   </button>
                 </div>
                 <form method="dialog" className="modal-backdrop">

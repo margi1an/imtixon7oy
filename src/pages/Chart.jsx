@@ -1,4 +1,3 @@
-// src/pages/ChartPage.jsx
 import React from 'react';
 import Chart from '../components/Charts';
 import Pie from '../components/Pie';

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { doc, getDoc } from "firebase/firestore";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../app/cartSlice";
@@ -7,6 +7,7 @@ import { db } from "../firebase/firebaseConfig";
 import toast from "react-hot-toast";
 
 function Product() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [car, setCar] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -44,9 +45,13 @@ function Product() {
     return <div>Loading...</div>;
   }
 
+  function handleNavigate () {
+    navigate('/')
+  }
 
   return (
     <div className="align-elements mt-9">
+      <button className="btn btn-primary" onClick={handleNavigate}>Back to Home</button>
       <div className="text-center mb-9">
         <p className="text-5xl font-semibold">Product :</p>
       </div>
