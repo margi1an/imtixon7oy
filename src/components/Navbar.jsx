@@ -1,6 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import "./Navbar.css";
 import { NavLink } from "react-router-dom";
 import { IoMdSunny, IoMdMoon } from "react-icons/io";
 import { useState, useEffect } from "react";
