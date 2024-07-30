@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components{
+    .align-elements {
+        @apply mx-auto max-w-6xl px-4
+    }
+  }
+  
+@layer container {
+    .container-class {
+      @apply flex flex-col items-center  max-w-screen-2xl w-11/12 ml-auto mr-auto select-none;
+    }
+  }
+  
